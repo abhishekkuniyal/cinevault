@@ -107,8 +107,14 @@ export async function loginUser(req, res) {
 
 // logout user
 export async function logoutUser(req, res) {
-  res.clearCookie("accessToken");
-  res.clearCookie("refreshToken");
+  const isProduction = process.env.NODE_ENV === "production";
+  const cookieOptions = {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+  };
+  res.clearCookie("accessToken", cookieOptions);
+  res.clearCookie("refreshToken", cookieOptions);
   return res.status(200).json({ message: "Logged out successfully" });
 }
 

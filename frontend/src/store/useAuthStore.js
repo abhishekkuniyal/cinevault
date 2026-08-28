@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { getApiUrl } from '../utils/api';
 
 const getStoredUser = () => {
   try {
@@ -21,7 +22,7 @@ export const useAuthStore = create((set, get) => ({
 
   checkAuth: async () => {
     try {
-      const res = await fetch('/api/auth/me', { credentials: 'include' });
+      const res = await fetch(getApiUrl('/api/auth/me'), { credentials: 'include' });
       if (res.ok) {
         const data = await res.json();
         const u = data.user;
@@ -49,7 +50,7 @@ export const useAuthStore = create((set, get) => ({
 
   register: async (credentials) => {
     try {
-      const res = await fetch('/api/auth/register', {
+      const res = await fetch(getApiUrl('/api/auth/register'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -72,7 +73,7 @@ export const useAuthStore = create((set, get) => ({
       return { success: false, message: "Please enter your email and password." };
     }
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(getApiUrl('/api/auth/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -107,7 +108,7 @@ export const useAuthStore = create((set, get) => ({
 
   logout: async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+      await fetch(getApiUrl('/api/auth/logout'), { method: 'POST', credentials: 'include' });
     } catch (e) { console.error(e); }
     localStorage.removeItem('cinevault_user');
     set({
@@ -124,10 +125,10 @@ export const useAuthStore = create((set, get) => ({
     
     try {
       if (isFollowing) {
-        await fetch(`/api/users/${userId}/unfollow`, { method: 'DELETE', credentials: 'include' });
+        await fetch(getApiUrl(`/api/users/${userId}/unfollow`), { method: 'DELETE', credentials: 'include' });
         current.delete(userId);
       } else {
-        await fetch(`/api/users/${userId}/follow`, { method: 'POST', credentials: 'include' });
+        await fetch(getApiUrl(`/api/users/${userId}/follow`), { method: 'POST', credentials: 'include' });
         current.add(userId);
       }
     } catch (e) {

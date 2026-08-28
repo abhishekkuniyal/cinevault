@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Search, Filter, Sparkles, SlidersHorizontal, Grid, List } from 'lucide-react';
 import MovieCard from '../components/MovieCard';
 import MoodSearchBar from '../components/MoodSearchBar';
+import { getApiUrl } from '../utils/api';
 
 export default function Browse() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,7 +24,7 @@ export default function Browse() {
       setLoading(true);
       if (moodQuery) {
         try {
-          const res = await fetch('/api/ai/mood-search', {
+          const res = await fetch(getApiUrl('/api/ai/mood-search'), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ mood: moodQuery })
@@ -44,7 +45,7 @@ export default function Browse() {
       } else if (selectedGenre !== 'All') {
         setAiInterpreted(null);
         try {
-          const res = await fetch(`/api/movies?search=${encodeURIComponent(selectedGenre)}`);
+          const res = await fetch(getApiUrl(`/api/movies?search=${encodeURIComponent(selectedGenre)}`));
           if (res.ok) {
             const data = await res.json();
             setMoviesData(data.movies || []);
@@ -60,7 +61,7 @@ export default function Browse() {
       } else {
         setAiInterpreted(null);
         try {
-          const res = await fetch('/api/movies');
+          const res = await fetch(getApiUrl('/api/movies'));
           if (res.ok) {
             const data = await res.json();
             setMoviesData(data.movies || []);

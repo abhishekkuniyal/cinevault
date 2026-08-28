@@ -8,6 +8,7 @@ import MoodSearchBar from '../components/MoodSearchBar';
 import { useUIStore } from '../store/useUIStore';
 import { useAuthStore } from '../store/useAuthStore';
 import { MOCK_REVIEWS } from '../data/mockData';
+import { getApiUrl } from '../utils/api';
 
 export default function Home() {
   const { openAuthModal } = useUIStore();
@@ -20,8 +21,8 @@ export default function Home() {
     const fetchHomeData = async () => {
       try {
         const [moviesRes, reviewsRes] = await Promise.all([
-          fetch('/api/movies'),
-          fetch('/api/review/recent')
+          fetch(getApiUrl('/api/movies')),
+          fetch(getApiUrl('/api/review/recent'))
         ]);
 
         if (moviesRes.ok) {

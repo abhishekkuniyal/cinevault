@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Star, Sparkles, Send, ShieldAlert, Loader2 } from 'lucide-react';
 import { useUIStore } from '../store/useUIStore';
 import { useAuthStore } from '../store/useAuthStore';
+import { getApiUrl } from '../utils/api';
 
 export default function WriteReviewModal() {
   const { writeReviewModalOpen, selectedMovieForReview, closeWriteReviewModal } = useUIStore();
@@ -21,7 +22,7 @@ export default function WriteReviewModal() {
     setSubmitting(true);
 
     try {
-      const res = await fetch('/api/review/createReview', {
+      const res = await fetch(getApiUrl('/api/review/createReview'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Lock, Globe, Bookmark } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import { useUIStore } from '../store/useUIStore';
+import { getApiUrl } from '../utils/api';
 
 export default function MyLists() {
   const { userWatchlists: localWatchlists } = useAuthStore();
@@ -11,7 +12,7 @@ export default function MyLists() {
   useEffect(() => {
     const fetchLists = async () => {
       try {
-        const res = await fetch('/api/lists/my-lists', { credentials: 'include' });
+        const res = await fetch(getApiUrl('/api/lists/my-lists'), { credentials: 'include' });
         if (res.ok) {
           const data = await res.json();
           if (data.lists && data.lists.length > 0) {

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, Sparkles, FolderPlus, Lock, Globe } from 'lucide-react';
 import { useUIStore } from '../store/useUIStore';
 import { useAuthStore } from '../store/useAuthStore';
+import { getApiUrl } from '../utils/api';
 
 export default function CreateListModal() {
   const { createListModalOpen, closeCreateListModal } = useUIStore();
@@ -19,7 +20,7 @@ export default function CreateListModal() {
     if (!title.trim()) return;
 
     try {
-      const res = await fetch('/api/lists', {
+      const res = await fetch(getApiUrl('/api/lists'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

@@ -5,6 +5,7 @@ import ReviewCard from '../components/ReviewCard';
 import { MOCK_FEED } from '../data/mockData';
 import { useAuthStore } from '../store/useAuthStore';
 import { useUIStore } from '../store/useUIStore';
+import { getApiUrl } from '../utils/api';
 
 export default function Feed() {
   const { isAuthenticated } = useAuthStore();
@@ -17,7 +18,7 @@ export default function Feed() {
   useEffect(() => {
     const fetchFeed = async () => {
       try {
-        const feedUrl = isAuthenticated ? '/api/feed' : '/api/feed/public';
+        const feedUrl = isAuthenticated ? getApiUrl('/api/feed') : getApiUrl('/api/feed/public');
         const res = await fetch(feedUrl, { credentials: 'include' });
         if (res.ok) {
           const data = await res.json();

@@ -5,6 +5,7 @@ import { useAuthStore } from '../store/useAuthStore';
 import { useUIStore } from '../store/useUIStore';
 import ReviewCard from '../components/ReviewCard';
 import { Avatar } from '../components/Avatar';
+import { getApiUrl } from '../utils/api';
 
 export default function Profile() {
   const { username } = useParams();
@@ -25,7 +26,7 @@ export default function Profile() {
       if (username && (!currentUser || username !== currentUser.username)) {
         setLoading(true);
         try {
-          const res = await fetch(`/api/auth/user/${username}`);
+          const res = await fetch(getApiUrl(`/api/auth/user/${username}`));
           if (res.ok) {
             const data = await res.json();
             setFetchedUser(data.user);
@@ -79,7 +80,7 @@ export default function Profile() {
       const targetId = activeUser.id || activeUser._id;
       if (targetId && targetId !== 'guest-id' && targetId !== 'public-id') {
         try {
-          const reviewRes = await fetch(`/api/review/user/${targetId}`, { credentials: 'include' });
+          const reviewRes = await fetch(getApiUrl(`/api/review/user/${targetId}`), { credentials: 'include' });
           if (reviewRes.ok) {
             const reviewData = await reviewRes.json();
             setUserReviews(reviewData.reviews || []);
@@ -95,7 +96,7 @@ export default function Profile() {
 
       if (isOwnProfile) {
         try {
-          const listRes = await fetch(`/api/lists/my-lists`, { credentials: 'include' });
+          const listRes = await fetch(getApiUrl(`/api/lists/my-lists`), { credentials: 'include' });
           if (listRes.ok) {
             const listData = await listRes.json();
             setUserWatchlists(listData.lists || []);

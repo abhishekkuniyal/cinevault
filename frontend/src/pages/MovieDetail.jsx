@@ -4,6 +4,7 @@ import { Star, Sparkles, Edit3, Bookmark, ArrowLeft } from 'lucide-react';
 import { useUIStore } from '../store/useUIStore';
 import ReviewCard from '../components/ReviewCard';
 import { MOCK_REVIEWS } from '../data/mockData';
+import { getApiUrl } from '../utils/api';
 
 export default function MovieDetail() {
   const { id } = useParams();
@@ -18,7 +19,7 @@ export default function MovieDetail() {
     const fetchMovieData = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`/api/movies/${id}`);
+        const res = await fetch(getApiUrl(`/api/movies/${id}`));
         if (res.ok) {
           const data = await res.json();
           setMovie(data.movie);
@@ -32,7 +33,7 @@ export default function MovieDetail() {
       }
 
       try {
-        const reviewRes = await fetch(`/api/review/getReview/${id}`);
+        const reviewRes = await fetch(getApiUrl(`/api/review/getReview/${id}`));
         if (reviewRes.ok) {
           const reviewData = await reviewRes.json();
           if (reviewData.reviews && reviewData.reviews.length > 0) {

@@ -12,13 +12,29 @@ import rateLimiter from "./middleware/rateLimiter.js";
 import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
+
+// Trust reverse proxies (Render, Vercel, Railway, Heroku, AWS) for HTTPS cookies & rate-limiting
+app.set("trust proxy", 1);
+
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) {
-      callback(null, true);
-    } else {
-      callback(null, true);
+    // Allow non-browser requests (Postman, curl, server-to-server)
+    if (!origin) return callback(null, true);
+    // Allow local development origins
+    if (/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) {
+      return callback(null, true);
     }
+    // Allow configured cloud frontend URLs
+    if (allowedOrigins.length > 0 && allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    // Fallback allowing origin dynamically for cloud preflights
+    return callback(null, true);
   },
   credentials: true,
 }));
